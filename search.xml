@@ -41,8 +41,8 @@
   <entry>
     <title>9班诗集</title>
     <url>/poem9/</url>
-    <content><![CDATA[<center> ## Chapter 1 </center>
-<center> ## Cinquain </center>
+    <content><![CDATA[<h2 id="center-chapter-1"><a class="markdownIt-Anchor" href="#center-chapter-1"></a> <center> Chapter 1</h2>
+<h2 id="center-cinquain"><a class="markdownIt-Anchor" href="#center-cinquain"></a> <center> Cinquain</h2>
 <h4 id="hotpot"><a class="markdownIt-Anchor" href="#hotpot"></a> Hotpot</h4>
 <p>Spicy, savoury</p>
 <p>Mixing, boiling, rolling</p>
