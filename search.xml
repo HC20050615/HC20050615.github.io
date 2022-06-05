@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>CSP2021游记</title>
+    <url>/CSP2021%E6%B8%B8%E8%AE%B0/</url>
+    <content><![CDATA[<p>…</p>
+<span id="more"></span>
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>这次CSP-S的难度较往年偏高，发挥也不太理想。没有一道题是很简单的题，部分分也给的不多。预估分数为100+28+28+0=156。</p>
+<h2 id="t1"><a class="markdownIt-Anchor" href="#t1"></a> T1</h2>
+<p>并没有很简单，但也不是特别复杂。本题可以用多种数据结构维护，从priority_queue到Splay都行，算法思路大致相同。本人在这只讲解自己的思路。</p>
+<p>我们先使每架飞机进站时使用可使用的编号最小的廊桥，我们只需要维护一下廊桥的空闲情况和在廊桥中的飞机编号与出站时间即可（我采用的是两个priority_queue实现）。就可以维护出所有飞机可使用廊桥的最小廊桥数，然后随便统计一下即可。</p>
+<p>我在考场上想过这样一个问题，如果一个飞机由于廊桥数目不够导致未使用廊桥，以至于之后的飞机使用廊桥的最小廊桥数减小，会对这种方法的正确性产生影响吗？(如果没有这个疑问可以直接跳过，不要被误导)</p>
+<p>并不会。因为若会出现这种情况，就一定是前一架飞机的廊桥使用编号大于后面的飞机的廊桥编号，这时前一架飞机对后一架飞机无任何影响，因为每次进入的飞机一定是寻找可以用的最小编号廊桥。</p>
+<h2 id="t2"><a class="markdownIt-Anchor" href="#t2"></a> T2</h2>
+<p>这道题的方法也是多种多样，主要就是区间DP。</p>
+<p>首先很容易想出一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>4</mn></msup></mrow><annotation encoding="application/x-tex">n^4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span> 的DP(就不写了)。但是注意这种情况：</p>
+<p>()()()</p>
+<p>如果你的方法会判重，说明方法没对，需要修改（不过我也不知道怎么改 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>…</mo></mrow><annotation encoding="application/x-tex">\dots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.12em;vertical-align:0em;"></span><span class="minner">…</span></span></span></span>）。如果没有判重，加一个前缀和即可。</p>
+<p>还有一种，就是维护三个不同的数组 SA、AS、ans(与题中定义相同)，然后就可以很方便地维护了。</p>
+<h2 id="t3"><a class="markdownIt-Anchor" href="#t3"></a> T3</h2>
+<p>这道题其实比较水，如果放在T1的话可能我就能AC了。我几乎已经想出了正解，但在实现的时候还是写成了DFS，着实是非常可惜。</p>
+<p>首先，枚举第一次选左还是右，然后你就可以决定最后选的位置（这个大家都能想出来）。</p>
+<p>然后暴力选择，优先选左，就可以写出高达 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>28</mn><mi>p</mi><mi>t</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">28pts</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mord">8</span><span class="mord mathdefault">p</span><span class="mord mathdefault">t</span><span class="mord mathdefault">s</span></span></span></span> 的dfs。</p>
+<p>我们考虑一下如何将这个转为正解。我们发现若某一次选择时，我们同时可以选左和右，我们的时间复杂度就会乘 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 。但我们发现，我们根本不需要重新走右。</p>
+<p>证明：</p>
+<p>如果左右都能选，那么在我们选了做之后，选右的机会就会出现在我们的下一次选择，意思说如果我们不选右，选右的方案会一直存在。因此，不管我们这一步选左还是选右，我们总的选择方案是完全相同的，一旦选左不行，选右的结果也一样。</p>
+<p>利用这个性质，我们的dfs瞬间变成了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的贪心，就可以愉快的通过本题了。</p>
+<h2 id="t4"><a class="markdownIt-Anchor" href="#t4"></a> T4</h2>
+<p>这道题个人认为完全是省选难度，甚至不能放在第一题。周围的巨佬以及本蒟蒻没有一个人会，也就太关注。现在听到的感觉最科学的方法是网络流转对偶图然后最短路。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>据说上午的普及组四道大模拟很简单，以为下午也会比较水。然后一看T1心态就崩了，T3也是失手犯错导致没AC，T2的暴力写到最后十分钟也没写对，总体来说发挥的不好。估计最多也就勉强一等分数线。</p>
+]]></content>
+      <categories>
+        <category>学术</category>
+      </categories>
+      <tags>
+        <tag>游记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>模板库</title>
+    <url>/%E6%A8%A1%E6%9D%BF%E5%BA%93/</url>
+    <content><![CDATA[<p>由于U盘多次废掉，保险起见，想到建一个云端模板库。</p>
+<span id="more"></span>
+<h2 id="数据结构"><a class="markdownIt-Anchor" href="#数据结构"></a> 数据结构</h2>
+<p><strong><a href="https://hc20050615.github.io/%E7%BA%BF%E6%AE%B5%E6%A0%91">线段树(标记永久化)</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E6%89%AB%E6%8F%8F%E7%BA%BF">扫描线</a></strong><br />
+<strong><a href="https://hc20050615.github.io/Splay">Splay</a></strong><br />
+<strong><a href="https://hc20050615.github.io/ODT">珂朵莉树（ODT）</a></strong></p>
+<h2 id="图论"><a class="markdownIt-Anchor" href="#图论"></a> 图论</h2>
+<p><strong><a href="https://hc20050615.github.io/%E6%9C%80%E7%9F%AD%E8%B7%AF">最短路</a></strong><br />
+<strong><a href="http://hc20050615.github.io/kruskal">最小生成树</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%E7%B3%BB%E7%BB%9F">差分约束系统</a></strong><br />
+<strong><a href="https://hc20050615.github.io/tarjan">连通性问题</a></strong><br />
+<strong><a href="https://hc20050615.github.io/LCA">LCA</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86/">树链剖分</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E7%BD%91%E7%BB%9C%E6%B5%81">网络流</a></strong><br />
+<strong><a href="https://hc20050615.github.io/2-SAT">2-SAT</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E7%82%B9%E5%88%86%E6%B2%BB">点分治</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E8%99%9A%E6%A0%91/">虚树</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E5%9C%86%E6%96%B9%E6%A0%91/">圆方树</a></strong></p>
+<h2 id="字符串"><a class="markdownIt-Anchor" href="#字符串"></a> 字符串</h2>
+<p><strong><a href="https://hc20050615.github.io/Manacher">Manacher</a></strong><br />
+<strong><a href="https://hc20050615.github.io/ACAM">AC自动机</a></strong><br />
+<strong><a href="https://hc20050615.github.io/SAM">后缀自动机(SAM)</a></strong></p>
+<h2 id="数论"><a class="markdownIt-Anchor" href="#数论"></a> 数论</h2>
+<p><strong><a href="https://hc20050615.github.io/%E6%95%B0%E8%AE%BA%E5%87%BD%E6%95%B0/">数论函数</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E5%8E%9F%E6%A0%B9/">原根</a></strong><br />
+<strong><a href="https://hc20050615.github.io/BSGS">BSGS</a></strong></p>
+<h2 id="计算几何"><a class="markdownIt-Anchor" href="#计算几何"></a> 计算几何</h2>
+<p><strong><a href="https://hc20050615.github.io/%E5%87%B8%E5%8C%85/">凸包</a></strong><br />
+<strong><a href="https://hc20050615.github.io/%E6%97%8B%E8%BD%AC%E5%8D%A1%E5%A3%B3/">旋转卡壳</a></strong></p>
+<h2 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h2>
+<p><strong><a href="https://hc20050615.github.io/%E9%AB%98%E7%B2%BE%E5%BA%A6/">高精度</a></strong><br />
+<strong><a href="https://hc20050615.github.io/R&amp;W">快读快输</a></strong></p>
+]]></content>
+      <categories>
+        <category>学术</category>
+      </categories>
+      <tags>
+        <tag>模板</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>白鲟博客密码破译思路</title>
+    <url>/%E7%99%BD%E9%B2%9F%E5%8D%9A%E5%AE%A2%E5%AF%86%E7%A0%81%E6%94%B6%E5%BD%95/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 密码错误." data-whm="嗯，密码不太正确，但你被允许查看文章.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="52f2a356d96580629113d372d3b2dd06544f1a1893d566238db83495f3a57d45">f23f69459da2fc33e216b6d96a4d54a760ff9bd0d351d0f7024d296b4936ea9e5116e85e74e3430e5e53f5bb92315ccc99202d9ab79c4caa1dad20f82828009bc030a1fc7fc9a73fd73b54e7e65f0dd9ce4224834e1779d0eaf01128e1e15c60e376b1b94a89c3e8dfcc7fd58f6328b4a4b11e4169ee6659ce604b9847953d85</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-xray">
+      <input class="hbe hbe-input-field hbe-input-field-xray" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-xray" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-xray">化作水井之人.</span>
+      </label>
+      <svg class="hbe hbe-graphic hbe-graphic-xray" width="300%" height="100%" viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,56.5c0,0,298.666,0,399.333,0C448.336,56.5,513.994,46,597,46c77.327,0,135,10.5,200.999,10.5c95.996,0,402.001,0,402.001,0"></path>
+        <path d="M0,2.5c0,0,298.666,0,399.333,0C448.336,2.5,513.994,13,597,13c77.327,0,135-10.5,200.999-10.5c95.996,0,402.001,0,402.001,0"></path>
+      </svg>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+  </entry>
+</search>
